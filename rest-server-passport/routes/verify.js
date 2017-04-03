@@ -34,3 +34,24 @@ exports.verifyOrdinaryUser = function (req, res, next) {
         return next(err);
     }
 };
+
+exports.needsGroup = function(group) {
+  return function(req, res, next) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    User.findOne({username: req.decoded.user.username}, function(err, user) {
+        if (err) {
+            return next(err);
+        } else {
+            if(user.admin===true&&group==="admin")
+                 next();
+             else if(user.admin===false&&group==="user")
+                next();
+             else{
+                var err = new Error('forbidden');
+                err.status = 403;
+                return next(err);
+             }
+        }
+    });
+  };
+};
