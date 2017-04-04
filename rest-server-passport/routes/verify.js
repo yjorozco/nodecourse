@@ -33,19 +33,28 @@ exports.verifyOrdinaryUser = function (req, res, next) {
         err.status = 403;
         return next(err);
     }
+
 };
 
 exports.needsGroup = function(group) {
   return function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    User.findOne({username: req.decoded.user.username}, function(err, user) {
+    jwt.verify(token, config.secretKey, function (err, decoded) {
+            if (err) {
+                var err = new Error('You are not authenticated!');
+                err.status = 401;
+                return next(err);
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;                
+            }
+    });
+    User.findOne({username: req.decoded._doc.username}, function(err, user) {
         if (err) {
             return next(err);
         } else {
-            if(user.admin===true&&group==="admin")
+            if((user.admin&&group==="admin")||(!user.admin&&group==="user"))                         
                  next();
-             else if(user.admin===false&&group==="user")
-                next();
              else{
                 var err = new Error('forbidden');
                 err.status = 403;

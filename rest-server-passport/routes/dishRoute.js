@@ -8,7 +8,7 @@ var dishRouter = express.Router();
 dishRouter.use(bodyParser.json());
 
 dishRouter.route('/')
-.get(Verify.verifyOrdinaryUser, function (req, res, next) {
+.get(Verify.verifyOrdinaryUser, Verify.needsGroup("user"), function (req, res, next) {
     Dishes.find({}, function (err, dish) {
         if (err) throw err;
         res.json(dish);
@@ -28,7 +28,7 @@ dishRouter.route('/')
     });
 })
 
-.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     Dishes.remove({}, function (err, resp) {
         if (err) throw err;
         res.json(resp);
