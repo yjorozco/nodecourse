@@ -1,21 +1,21 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
+var Verify = require('./verify');
 var LeaderShips = require('../models/leaderships');
 
 var leaderShipRouter = express.Router();
 leaderShipRouter.use(bodyParser.json());
 
 leaderShipRouter.route('/')
-.get(function (req, res, next) {
+.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
     LeaderShips.find({}, function (err, leaderShip) {
         if (err) throw err;
         res.json(leaderShip);
     });
 })
 
-.post(function (req, res, next) {
+.post(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.create(req.body, function (err, leaderShip) {
         if (err) throw err;
         console.log('leaderShip created!');
@@ -28,7 +28,7 @@ leaderShipRouter.route('/')
     });
 })
 
-.delete(function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.remove({}, function (err, resp) {
         if (err) throw err;
         res.json(resp);
@@ -36,14 +36,14 @@ leaderShipRouter.route('/')
 });
 
 leaderShipRouter.route('/:leaderShipId')
-.get(function (req, res, next) {
+.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
         if (err) throw err;
         res.json(leaderShip);
     });
 })
 
-.put(function (req, res, next) {
+.put(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.findByIdAndUpdate(req.params.leaderShipId, {
         $set: req.body
     }, {
@@ -54,21 +54,21 @@ leaderShipRouter.route('/:leaderShipId')
     });
 })
 
-.delete(function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.findByIdAndRemove(req.params.leaderShipId, function (err, resp) {        if (err) throw err;
         res.json(resp);
     });
 });
 
 leaderShipRouter.route('/:leaderShipId/comments')
-.get(function (req, res, next) {
+.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
         if (err) throw err;
         res.json(leaderShip.comments);
     });
 })
 
-.post(function (req, res, next) {
+.post(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
         if (err) throw err;
         leaderShip.comments.push(req.body);
@@ -80,7 +80,7 @@ leaderShipRouter.route('/:leaderShipId/comments')
     });
 })
 
-.delete(function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
         if (err) throw err;
         for (var i = (leaderShip.comments.length - 1); i >= 0; i--) {
@@ -97,14 +97,14 @@ leaderShipRouter.route('/:leaderShipId/comments')
 });
 
 leaderShipRouter.route('/:leaderShipId/comments/:commentId')
-.get(function (req, res, next) {
+.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
         if (err) throw err;
         res.json(leaderShip.comments.id(req.params.commentId));
     });
 })
 
-.put(function (req, res, next) {
+.put(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     // We delete the existing commment and insert the updated
     // comment as a new comment
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
@@ -119,7 +119,7 @@ leaderShipRouter.route('/:leaderShipId/comments/:commentId')
     });
 })
 
-.delete(function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
     LeaderShips.findById(req.params.leaderShipId, function (err, leaderShip) {
         leaderShip.comments.id(req.params.commentId).remove();
         leaderShip.save(function (err, resp) {
