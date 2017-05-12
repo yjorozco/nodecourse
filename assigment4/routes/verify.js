@@ -54,7 +54,11 @@ exports.verifyAdmin = function (req, res, next) {
                 User.findOne({username: req.decoded._doc.username}, function(err, user) {
                     if (err) {
                         return next(err);
+<<<<<<< HEAD
                     } else {                       
+=======
+                    } else {
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a
                         if(user.admin)                         
                              next();
                          else{
@@ -103,9 +107,13 @@ exports.needsGroup = function(group) {
         }
     });
   };
+<<<<<<< HEAD
 };
 
 exports.getUser = function(token) {  
     var decoded=jwt.verify(token, config.secretKey);       
     return decoded._doc;       
 };
+=======
+};
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a

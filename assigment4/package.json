@@ -19,7 +19,10 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
+<<<<<<< HEAD
     "q": "^1.5.0",
+=======
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a
     "serve-favicon": "~2.3.2"
   }
 }

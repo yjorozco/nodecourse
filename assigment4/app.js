@@ -23,20 +23,31 @@ var users = require('./routes/users');
 var dishRouter = require('./routes/dishRoute');
 var promoRouter = require('./routes/promoRoute');
 var leaderRouter = require('./routes/leaderRoute');
+<<<<<<< HEAD
 var favoriteRouter = require('./routes/favoriteRoute');
+=======
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a
 
 var app = express();
 
 
 // Secure traffic only
+<<<<<<< HEAD
 /*app.all('*', function(req, res, next){
+=======
+app.all('*', function(req, res, next){
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a
     console.log('req start: ',req.secure, req.hostname, req.url, app.get('port'));
   if (req.secure) {
     return next();
   };
 
  res.redirect('https://'+req.hostname+':'+app.get('secPort')+req.url);
+<<<<<<< HEAD
 });*/
+=======
+});
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,7 +74,10 @@ app.use('/users', users);
 app.use('/dishes',dishRouter);
 app.use('/promotions',promoRouter);
 app.use('/leadership',leaderRouter);
+<<<<<<< HEAD
 app.use('/favorites',favoriteRouter);
+=======
+>>>>>>> afd6707a98d922fbe87c16d9c565366040776b7a
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
