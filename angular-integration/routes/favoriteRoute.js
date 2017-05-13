@@ -7,7 +7,7 @@ var favoriteRouter = express.Router();
 favoriteRouter.use(bodyParser.json());
 
 favoriteRouter.route('/')
-.get(Verify.verifyOrdinaryUser, function (req, res, next) {
+.get(function (req, res, next) {
     Favorites.find({}, function (err, favorite) {
         if (err) throw err;
         res.json(favorite);

@@ -8,7 +8,7 @@ var leaderShipRouter = express.Router();
 leaderShipRouter.use(bodyParser.json());
 
 leaderShipRouter.route('/')
-.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
+.get( function (req, res, next) {
     LeaderShips.find({}, function (err, leaderShip) {
         if (err) throw err;
         res.json(leaderShip);

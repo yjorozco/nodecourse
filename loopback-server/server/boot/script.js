@@ -1,13 +1,13 @@
 module.exports = function(app) {
 var MongoDB = app.dataSources.MongoDB;
 
-/*MongoDB.automigrate('Customer', function(err) {
+MongoDB.automigrate('Customer', function(err) {
    if (err) throw (err);
    var Customer = app.models.Customer;
 
    Customer.create([
-    {username: 'Admin', email: 'admin@admin.com', password: 'abcdef'},
-    {username: 'muppala', email: 'muppala@ust.hk', password: 'abcdef'}
+    {username: 'Admin', email: 'admin@admin.com', password: 'abcdef',admin:true},
+    {username: 'muppala', email: 'muppala@ust.hk', password: 'abcdef',admin:false}
   ], function(err, users) {
     if (err) throw (err);
      var Role = app.models.Role;
@@ -27,6 +27,6 @@ var MongoDB = app.dataSources.MongoDB;
       });
     });
   });
-});*/
+});
 
 };

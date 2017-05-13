@@ -8,14 +8,14 @@ var promotionRouter = express.Router();
 promotionRouter.use(bodyParser.json());
 
 promotionRouter.route('/')
-.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
+.get(function (req, res, next) {
     Promotions.find({}, function (err, promotion) {
         if (err) throw err;
         res.json(promotion);
     });
 })
 
-.post(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.post(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.create(req.body, function (err, promotion) {
         if (err) throw err;
         console.log('promotion created!');
@@ -28,7 +28,7 @@ promotionRouter.route('/')
     });
 })
 
-.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.remove({}, function (err, resp) {
         if (err) throw err;
         res.json(resp);
@@ -43,7 +43,7 @@ promotionRouter.route('/:promotionId')
     });
 })
 
-.put(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.put(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findByIdAndUpdate(req.params.promotionId, {
         $set: req.body
     }, {
@@ -54,21 +54,21 @@ promotionRouter.route('/:promotionId')
     });
 })
 
-.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findByIdAndRemove(req.params.promotionId, function (err, resp) {        if (err) throw err;
         res.json(resp);
     });
 });
 
 promotionRouter.route('/:promotionId/comments')
-.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
+.get(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findById(req.params.promotionId, function (err, promotion) {
         if (err) throw err;
         res.json(promotion.comments);
     });
 })
 
-.post(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.post(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findById(req.params.promotionId, function (err, promotion) {
         if (err) throw err;
         promotion.comments.push(req.body);
@@ -80,7 +80,7 @@ promotionRouter.route('/:promotionId/comments')
     });
 })
 
-.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findById(req.params.promotionId, function (err, promotion) {
         if (err) throw err;
         for (var i = (promotion.comments.length - 1); i >= 0; i--) {
@@ -97,14 +97,14 @@ promotionRouter.route('/:promotionId/comments')
 });
 
 promotionRouter.route('/:promotionId/comments/:commentId')
-.get(Verify.verifyOrdinaryUser,  Verify.needsGroup("user"), function (req, res, next) {
+.get(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findById(req.params.promotionId, function (err, promotion) {
         if (err) throw err;
         res.json(promotion.comments.id(req.params.commentId));
     });
 })
 
-.put(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.put(Verify.verifyOrdinaryUser, function (req, res, next) {
     // We delete the existing commment and insert the updated
     // comment as a new comment
     Promotions.findById(req.params.promotionId, function (err, promotion) {
@@ -119,7 +119,7 @@ promotionRouter.route('/:promotionId/comments/:commentId')
     });
 })
 
-.delete(Verify.verifyOrdinaryUser,  Verify.needsGroup("admin"), function (req, res, next) {
+.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
     Promotions.findById(req.params.promotionId, function (err, promotion) {
         promotion.comments.id(req.params.commentId).remove();
         promotion.save(function (err, resp) {
